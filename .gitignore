@@ -1,0 +1,10 @@
+vsim.wlf
+vsim.dbg
+qrun.log
+modelsim.ini
+dump.vcd
+qrun.out/
+work/
+sessions/
+animations/
+transcript
