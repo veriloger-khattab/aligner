@@ -3,8 +3,12 @@ vsim.dbg
 qrun.log
 modelsim.ini
 dump.vcd
+tr_db.log
+**/wift*
 qrun.out/
 work/
 sessions/
-animations/
+docs/uvm
+docs/sv
+docs/maximize_productivity.txt
 transcript
