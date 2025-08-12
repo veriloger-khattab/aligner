@@ -4,6 +4,7 @@ qrun.log
 modelsim.ini
 dump.vcd
 tr_db.log
+wift*
 qrun.out/
 work/
 sessions/
