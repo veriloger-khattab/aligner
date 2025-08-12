@@ -1,19 +1,18 @@
 @echo off
-echo _______________________________________________________________________________
-echo                                Ahmad Khattab
-echo ===============================================================================
-echo   Compiling the design, Adding dut signals to waveform and running simulation
-echo   ===========================================================================
+echo      _________________________________________________________________
+echo                                 Ahmad Khattab
+echo        =============================================================
+echo          compiling the files, running REG_ACCESS_TEST in gui mode
+echo          ========================================================
 echo.
-echo                                .         .
-echo                              .    .   .    .
-echo                             .       .       .
-echo                              .             .
-echo                                 .      .
-echo                                     .
+echo                                 .         .
+echo                               .    .   .    .
+echo                              .       .       .
+echo                                .           .
+echo                                  .      .
+echo                                      .
 echo.
 qrun -gui -access=rw+/. -uvmhome uvm-1.2 -mfcu ^
-Design\design.sv Testbench\testbench.sv ^
+design\\design.sv testbench\\testbench.sv ^
 -voptargs="+acc" ^
--do "vlog -timescale 1ns/1ns +incdir+Testbench Design\design.sv Testbench\testbench.sv; vsim -voptargs=+acc work.testbench; add wave -position insertpoint sim:/testbench/dut/*; run -all; exit" ^
-+UVM_TESTNAME=cfs_algn_test_reg_access
+-do "vlog -timescale 1ns/1ns +incdir+testbench design\\design.sv testbench\\testbench.sv; vsim -voptargs=+acc=rn work.testbench +UVM_TESTNAME=cfs_algn_test_reg_access; add wave -position insertpoint sim:/testbench/dut/reset_n sim:/testbench/dut/clk sim:/testbench/dut/psel sim:/testbench/dut/penable sim:/testbench/dut/pwrite sim:/testbench/dut/paddr sim:/testbench/dut/pwdata sim:/testbench/dut/prdata sim:/testbench/dut/pready sim:/testbench/dut/pslverr; run -all; exit"
