@@ -1,16 +1,10 @@
 @echo off
-echo      _________________________________________________________________
-echo                                 Ahmad Khattab
-echo        =============================================================
-echo          compiling the files, running REG_ACCESS_TEST in gui mode
-echo          ========================================================
+echo                                           ____________________________________________________________
+echo                                           \                       Ahmad Khattab                      /
+echo                                            ==========================================================
+echo                                             \ compiling files, running REG_ACCESS_TEST in gui mode /
+echo                                              ======================================================
 echo.
-echo                                 .         .
-echo                               .    .   .    .
-echo                              .       .       .
-echo                                .           .
-echo                                  .      .
-echo                                      .
 echo.
 qrun -gui -access=rw+/. -uvmhome uvm-1.2 -mfcu ^
 design\\design.sv testbench\\testbench.sv ^
