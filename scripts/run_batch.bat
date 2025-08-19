@@ -1,16 +1,10 @@
 @echo off
-echo      __________________________________________________________________
-echo                                 Ahmad Khattab
-echo        ==============================================================
-echo          compiling the files, running REG_ACCESS_TEST in batch mode
-echo          ==========================================================
+echo                                           ______________________________________________________________
+echo                                           \                        Ahmad Khattab                       /
+echo                                            ============================================================
+echo                                             \ compiling files, running REG_ACCESS_TEST in batch mode /
+echo                                              ========================================================
 echo.
-echo                                 .         .
-echo                               .    .   .    .
-echo                              .       .       .
-echo                                .           .
-echo                                  .      .
-echo                                      .
 echo.
 qrun -batch -access=rw+/. -uvmhome uvm-1.2 -mfcu ^
 design\\design.sv testbench\\testbench.sv ^
