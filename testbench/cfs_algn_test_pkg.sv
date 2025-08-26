@@ -1,22 +1,24 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Author    : Ahmad Khattab
-// Date      : 8/8/25
+// Date      : 7/8/25
 // File      : cfs_algn_test_pkg.sv
-// Status    : In progress
-// Goal      : Creating a package for aligner tests
+// Status    : not finalized
+// Goal      : creating a package for aligner tests
 // Instructor: Cristian Slav
-// Tips      : Read the code guide to understand how the code works
+// Tips      : read the code documentation below to understand how the code works
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 `ifndef CFS_ALGN_TEST_PKG_SV
   `define CFS_ALGN_TEST_PKG_SV
 
-  `include "uvm_macros.svh"                                                                        // Enables uvm macros usage in tests
+  `include "uvm_macros.svh"                                                                                                                          // Enables uvm macros usage in tests
   `include "cfs_algn_pkg.sv"
 
   package cfs_algn_test_pkg;
-    import uvm_pkg::*;                                                                             // Gives tests uvm access
-    import cfs_algn_pkg::*;                                                                        // Gives tests env access
+    import uvm_pkg::*;                                                                                                                               // This is required as the aligner base test extends uvm_test
+    import cfs_algn_pkg::*;                                                                                                                          // Gives tests env access
+    import cfs_apb_pkg::*;
+
     `include "cfs_algn_test_base.sv"
     `include "cfs_algn_test_reg_access.sv"
   endpackage
@@ -27,16 +29,43 @@
 
 //////////////////////////////////////////////////////ENABLE DOCS BY REMOVING "/" IN THE NEXT LINE//////////////////////////////////////////////////
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *                                                               --- "Merge info" ---                                                              *
+ *                                                         --- "Implementation steps" ---                                                          *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                                                                                                 *
- *"   1- include base test and register access test files inside the test package                                                                 "*
- *"   2- import uvm papckage as uvm will be used by the tests and import the environment package as the environment is inside the tests           "*
- *"   3- include uvm_macros.svh file and cfs_algn_pkg.sv file outside the test package as uvm_pkg and cfs_algn_pkg were imported inside           "*
+ *"   1- include base test file inside the test package                                                                                           "*
+ *"   2- include register access test file inside the test package                                                                                "*
+ *"   3- import uvm package inside the aligner test package and include "uvm_macros.svh" outside                                                  "*
+ *"   4- import aligner environment package inside the aligner test package and include it outside                                                "*
+ *"   5- import apb package inside the test package                                                                                               "*
  *                                                                                                                                                 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
+
+//////////////////////////////////////////////////////ENABLE DOCS BY REMOVING "/" IN THE NEXT LINE//////////////////////////////////////////////////
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                                                               --- "Merge info" ---                                                              *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                                                                                                                                                 *
+ *"   1- import the test package inside the testbench & include it outside                                                                        "*
+ *                                                                                                                                                 *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+//////////////////////////////////////////////////////ENABLE DOCS BY REMOVING "/" IN THE NEXT LINE//////////////////////////////////////////////////
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                                                        --- "Test inheritance tree" ---                                                          *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                                                                                                                                                 *
+ *"                                                                                                                                               "*
+ *"                                     ~--- cfs_algn_test_random           not included yet                                                      "*
+ *"                                     |                                                                                                         "*
+ *"   uvm_test <- cfs_algn_test_base <--~--- cfs_algn_test_reg_access                                                                             "*
+ *"                                     |                                                                                                         "*
+ *"                                     ~--- cfs_algn_test_illegal_rx       not included yet                                                      "*
+ *"                                                                                                                                               "*
+ *                                                                                                                                                 *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
 //////////////////////////////////////////////////////ENABLE DOCS BY REMOVING "/" IN THE NEXT LINE//////////////////////////////////////////////////
@@ -44,9 +73,9 @@
  *                                                            --- "Diagarm Hierarchy" ---                                                          *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                                                                                                 *
- *"   testbench                                                                                                                           (o)     "*
+ *"   testbench                                                                                                                                   "*
  *"            tests                                                                             package       <- We are here now         (o)     "*
- *"                 environment                                                                                                           (o)     "*
+ *"                 environment                                                                                                                   "*
  *"                            config                                                                                                             "*
  *"                            virtual_sequencer                                                                                                  "*
  *"                            scoreboard                                                                                                         "*
