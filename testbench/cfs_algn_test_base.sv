@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Author    : Ahmad Khattab
-// Date      : 8/8/25
+// Date      : 7/8/25
 // File      : cfs_algn_test_base.sv
-// Status    : In progress
-// Goal      : Creating a parent base test for aligner
+// Status    : not finalized
+// Goal      : creating a parent base test for aligner
 // Instructor: Cristian Slav
-// Tips      : Read the code guide to understand how the code works
+// Tips      : read the code documentation below to understand how the code works
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 `ifndef CFS_ALGN_TEST_BASE_SV
@@ -13,16 +13,16 @@
 
   class cfs_algn_test_base extends uvm_test;
 
-    cfs_algn_env env;                                                                              // Declaring a handle to aligner environment
-    `uvm_component_utils(cfs_algn_test_base)                                                       // This enables access to uvm features
+    cfs_algn_env env;                                                                                                                                // Declaring a handle to aligner environment class
+    `uvm_component_utils(cfs_algn_test_base)                                                                                                         // Aligner base test is now registered with uvm factory & can use all utility methods & features
 
-    function new(string name = "", uvm_component parent);
+    function new(string name = "", uvm_component parent);                                                                                            // Mandatory code for uvm components (declaration of constructor)
       super.new(name, parent);
     endfunction
 
     virtual function void build_phase(uvm_phase phase);
       super.build_phase(phase);
-      env = cfs_algn_env::type_id::create("env", this);                                            // Parent is the base test class (this class)
+      env = cfs_algn_env::type_id::create("env", this);                                                                                              // Creating an alinger environment agent object
     endfunction
 
   endclass
@@ -49,10 +49,10 @@
  *                                                         --- "Implementation steps" ---                                                          *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                                                                                                 *
- *"  1- Start by extending base test from uvm test                                                                                                "*
- *"  2- Declare a handle (pointer) named env of type cfs_algn_env                                                                                 "*
- *"  3- Write the mandatory code                                                                                                                  "*
- *"  4- Create an object instance of the environment inside the base test                                                                         "*
+ *"   1- declare aligner base test class and extend it from uvm test                                                                              "*
+ *"   2- write mandatory code                                                                                                                     "*
+ *"   3- instantiate aligner environment class by declaring a handler inside the base test                                                        "*
+ *"   4- create an aligner environment object inside the build_phase of the base test                                                             "*
  *                                                                                                                                                 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -64,10 +64,25 @@
  *                                                               --- "Merge info" ---                                                              *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                                                                                                 *
- *"  1- Register aligner's base test with the uvm factory to enable access to uvm features                                                        "*
- *      `uvm_component_utils(cfs_algn_test_base)                                                                                                   *
+ *"   1- include base test file inside the test package                                                                                           "*
  *                                                                                                                                                 *
- *"  2- create an instance of aligner environment inside the base test                                                                            "*
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+
+
+//////////////////////////////////////////////////////ENABLE DOCS BY REMOVING "/" IN THE NEXT LINE//////////////////////////////////////////////////
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                                                        --- "Test inheritance tree" ---                                                          *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                                                                                                                                                 *
+ *"                                                                                                                                               "*
+ *"                                        ~--- cfs_algn_test_random           not included yet                                                   "*
+ *"                                        |                                                                                                      "*
+ *"   uvm_test <- cfs_algn_test_base (o)<--~--- cfs_algn_test_reg_access                                                                          "*
+ *"                                        |                                                                                                      "*
+ *"                                        ~--- cfs_algn_test_illegal_rx       not included yet                                                   "*
+ *"                                                                                                                                               "*
  *                                                                                                                                                 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -79,9 +94,9 @@
  *                                                            --- "Diagarm Hierarchy" ---                                                          *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                                                                                                 *
- *"   testbench                                                                                                                           (o)     "*
+ *"   testbench                                                                                                                                   "*
  *"            tests                                                                                base       <- We are here now         (o)     "*
- *"                 environment                                                                                                           (o)     "*
+ *"                 environment                                                                                                                   "*
  *"                            config                                                                                                             "*
  *"                            virtual_sequencer                                                                                                  "*
  *"                            scoreboard                                                                                                         "*
