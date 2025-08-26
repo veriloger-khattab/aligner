@@ -2,20 +2,22 @@
 // Author    : Ahmad Khattab
 // Date      : 7/8/25
 // File      : testbench.sv
-// Status    : In progress
-// Goal      : Creating a testbench to verify aligner module
+// Status    : in progress
+// Goal      : creating a testbench to verify aligner module
 // Instructor: Cristian Slav
-// Tips      : Read the code guide to understand how the code works
+// Tips      : read the code documentation below to understand how the code works
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 `include "cfs_algn_test_pkg.sv"
 
 module testbench();
 
-  import uvm_pkg::*;
-  import cfs_algn_test_pkg::*;
+  import uvm_pkg::*;                                                                                                                                 // To use run_test("") function
+  import cfs_algn_test_pkg::*;                                                                                                                       // Testbench now have access to tests classes
 
   reg clk;
+
+  cfs_apb_if apb_if(.pclk(clk));
   initial begin
     clk = 0;
     forever begin
@@ -23,25 +25,35 @@ module testbench();
     end
   end
 
-  reg reset_n;
   initial begin
-    reset_n = 1;
-    #6ns;
-    reset_n = 0;                                                                                   // Aligner registers will be initialized to zero
+    apb_if.preset_n = 1;
+    #3ns;
+    apb_if.preset_n = 0;                                                                                                                             // Aligner registers will get their initial values
     #30ns;
-    reset_n = 1;
+    apb_if.preset_n = 1;
   end
 
   initial begin
     $dumpfile("dump.vcd");
     $dumpvars;
-    run_test("");                                                                                  // Tests run from the very beginning, test name is specified in run_batch.bat file
+
+    uvm_config_db#(virtual cfs_apb_if)::set(null, "uvm_test_top.env.apb_agent", "vif", apb_if);                                                      // Setting apb virtual interface inside uvm configuration database. The interface must be virtual now
+
+    run_test("");                                                                                                                                    // Test name is specified in run_batch.bat file
   end
 
 
   cfs_aligner dut(
     .clk(clk),
-    .reset_n(reset_n)
+    .reset_n(apb_if.preset_n),
+    .paddr(apb_if.paddr),
+    .prdata(apb_if.prdata),
+    .pwdata(apb_if.pwdata),
+    .psel(apb_if.psel),
+    .penable(apb_if.penable),
+    .pready(apb_if.pready),
+    .pwrite(apb_if.pwrite),
+    .pslverr(apb_if.pslverr)
     );
 
 endmodule
@@ -57,15 +69,12 @@ endmodule
  *"                                                                                                                                               "*
  *"==============================================================================================================================================="*
  *"                                                                                                                                               "*
- *"  1- The testbench is not a class, it is a normal module                                                                                       "*
+ *"   1- testbench is not a class, it is a normal module                                                                                          "*
  *"                                                                                                                                               "*
- *"  2- Initial blocks execute in parallel and it is better so separate the initial blocks of the clock, reset and running tests in order to keep "*
- *"     the code clean                                                                                                                            "*
+ *"   2- initial blocks execute in parallel and it is better so separate the initial blocks of the clock, reset and running tests in order to keep"*
+ *"      the code clean                                                                                                                           "*
  *"                                                                                                                                               "*
- *"  3- We Reset the dut so that all the regesters in aligner are initiazlied to zero                                                             "*
- *"                                                                                                                                               "*
- *"  4- The test should be chosen from the run command in the batch file, this is better than typing the name of the test inside the testbench    "*
- *"                                                                                                                                               "*
+ *"   3- if we need to run a test we specify that the batch file, this is better than typing the name of the test directly inside the testbench   "*
  *                                                                                                                                                 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -77,22 +86,18 @@ endmodule
  *                                                         --- "Implementation steps" ---                                                          *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                                                                                                 *
- *"  1- Start by creating three initial blocks, one for the clock, another for reset and the third to call run_test("") function.                 "*
- *"  2- Create an instance of the dut and connect the testbench clock and reset signals to the corresponding clock and reset ports of the dut     "*
+ *"   1- create an instance of the dut (aligner)                                                                                                  "*
+ *"   2- initialize the clock, set its frequency and connect it to the dut clock                                                                  "*
+ *"   3- connect apb interface signals with dut's apb signals                                                                                     "*
+ *"   4- import uvm package inside the testbench to use run_test("") function                                                                     "*
+ *"   5- import the test package inside the testbench & include it outside                                                                        "*
+ *"   5- instantiate apb interface inside the testbench                                                                                           "*
+ *"   6- set apb interface inside uvm configuration database and give access to the apb agent                                                     "*
  *                                                                                                                                                 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 
-//////////////////////////////////////////////////////ENABLE DOCS BY REMOVING "/" IN THE NEXT LINE//////////////////////////////////////////////////
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *                                                               --- "Merge info" ---                                                              *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *                                                                                                                                                 *
- *"   1- import aligner test package, as the testbench includes all the tests                                                                     "*
- *"   2- include the test package file outside the testbench module, since the alginer test package was imported                                  "*
- *"   3- import uvm package, since the tests inside the testbench will use uvm library                                                            "*
- *                                                                                                                                                 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 
 
 //////////////////////////////////////////////////////ENABLE DOCS BY REMOVING "/" IN THE NEXT LINE//////////////////////////////////////////////////
@@ -101,8 +106,8 @@ endmodule
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                                                                                                 *
  *"   testbench                                                                                                <- We are here now         (o)     "*
- *"            tests                                                                                                                      (o)     "*
- *"                 environment                                                                                                           (o)     "*
+ *"            tests                                                                                                                              "*
+ *"                 environment                                                                                                                   "*
  *"                            config                                                                                                             "*
  *"                            virtual_sequencer                                                                                                  "*
  *"                            scoreboard                                                                                                         "*
@@ -136,7 +141,6 @@ endmodule
  *"                                                                                                                                               "*
  *"                         For more better visualization, visit systemverilog.netlify.app to see the whole diagram                               "*
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
 
 
 
