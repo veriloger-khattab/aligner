@@ -1,19 +1,19 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Author    : Ahmad Khattab
 // Date      : 7/8/25
-// File      : cfs_algn_env.sv
+// File      : ak_algn_env.sv
 // Status    : not finalized
 // Goal      : creating a uvm environment for aligner
 // Instructor: Cristian Slav
 // Tips      : read the code documentation below to understand how the code works
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-`ifndef CFS_ALGN_ENV_SV
-  `define CFS_ALGN_ENV_SV
+`ifndef AK_ALGN_ENV_SV
+  `define AK_ALGN_ENV_SV
 
-  class cfs_algn_env extends uvm_env;
-    cfs_apb_agent apb_agent;                                                                                                                         // Declaring a handler to apb agent class
-    `uvm_component_utils(cfs_algn_env)                                                                                                               // Aligner environment is now registered with uvm factory & can use all utility methods & features
+  class ak_algn_env extends uvm_env;
+    ak_apb_agent apb_agent;                                                                                                                          // Declaring a handler to apb agent class
+    `uvm_component_utils(ak_algn_env)                                                                                                                // Aligner environment is now registered with uvm factory & can use all utility methods & features
 
     function new(string name = "", uvm_component parent);                                                                                            // Mandatory code for uvm components (declaration of constructor)
       super.new(name, parent);
@@ -21,7 +21,7 @@
 
     virtual function void build_phase(uvm_phase phase);
       super.build_phase(phase);
-      apb_agent = cfs_apb_agent::type_id::create("apb_agent", this);                                                                                 // Creating an apb agent object
+      apb_agent = ak_apb_agent::type_id::create("apb_agent", this);                                                                                  // Creating an apb agent object
     endfunction
 
   endclass

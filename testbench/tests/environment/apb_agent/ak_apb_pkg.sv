@@ -13,7 +13,7 @@
 
 
   `include "uvm_macros.svh"
-  `include "../ak_apb_if.sv"                                                                                                                            // note that it is included outside the package & should not be imported inside
+  `include "../../../ak_apb_if.sv"                                                                                                                            // note that it is included outside the package & should not be imported inside
   package ak_apb_pkg;
     import uvm_pkg::*;
 

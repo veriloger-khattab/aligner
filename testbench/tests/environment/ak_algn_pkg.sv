@@ -1,22 +1,22 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Author    : Ahmad Khattab
 // Date      : 7/8/25
-// File      : cfs_algn_pkg.sv
+// File      : ak_algn_pkg.sv
 // Status    : not finalized
 // Goal      : creating a package for the environment
 // Instructor: Cristian Slav
 // Tips      : read the code documentation below to understand how the code works
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-`ifndef CFS_ALGN_PKG_SV
-  `define CFS_ALGN_PKG_SV
+`ifndef AK_ALGN_PKG_SV
+  `define AK_ALGN_PKG_SV
 
   `include "uvm_macros.svh"
-  `include "cfs_apb_pkg.sv"
-  package cfs_algn_pkg;
+  `include "apb_agent/ak_apb_pkg.sv"
+  package ak_algn_pkg;
     import uvm_pkg::*;
-    import cfs_apb_pkg::*;
-    `include "cfs_algn_env.sv"
+    import ak_apb_pkg::*;
+    `include "ak_algn_env.sv"
   endpackage
 
 `endif

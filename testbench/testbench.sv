@@ -8,16 +8,16 @@
 // Tips      : read the code documentation below to understand how the code works
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-`include "cfs_algn_test_pkg.sv"
+`include "tests/ak_algn_test_pkg.sv"
 
 module testbench();
 
   import uvm_pkg::*;                                                                                                                                 // To use run_test("") function
-  import cfs_algn_test_pkg::*;                                                                                                                       // Testbench now have access to tests classes
+  import ak_algn_test_pkg::*;                                                                                                                        // Testbench now have access to tests classes
 
   reg clk;
 
-  cfs_apb_if apb_if(.pclk(clk));
+  ak_apb_if apb_if(.pclk(clk));
   initial begin
     clk = 0;
     forever begin
@@ -37,7 +37,7 @@ module testbench();
     $dumpfile("dump.vcd");
     $dumpvars;
 
-    uvm_config_db#(virtual cfs_apb_if)::set(null, "uvm_test_top.env.apb_agent", "vif", apb_if);                                                      // Setting apb virtual interface inside uvm configuration database. The interface must be virtual now
+    uvm_config_db#(virtual ak_apb_if)::set(null, "uvm_test_top.env.apb_agent", "vif", apb_if);                                                       // Setting apb virtual interface inside uvm configuration database. The interface must be virtual now
 
     run_test("");                                                                                                                                    // Test name is specified in run_batch.bat file
   end

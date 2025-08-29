@@ -1,26 +1,26 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Author    : Ahmad Khattab
 // Date      : 7/8/25
-// File      : cfs_algn_test_pkg.sv
+// File      : ak_algn_test_pkg.sv
 // Status    : not finalized
 // Goal      : creating a package for aligner tests
 // Instructor: Cristian Slav
 // Tips      : read the code documentation below to understand how the code works
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-`ifndef CFS_ALGN_TEST_PKG_SV
-  `define CFS_ALGN_TEST_PKG_SV
+`ifndef AK_ALGN_TEST_PKG_SV
+  `define AK_ALGN_TEST_PKG_SV
 
   `include "uvm_macros.svh"                                                                                                                          // Enables uvm macros usage in tests
-  `include "cfs_algn_pkg.sv"
+  `include "environment/ak_algn_pkg.sv"
 
-  package cfs_algn_test_pkg;
+  package ak_algn_test_pkg;
     import uvm_pkg::*;                                                                                                                               // This is required as the aligner base test extends uvm_test
-    import cfs_algn_pkg::*;                                                                                                                          // Gives tests env access
-    import cfs_apb_pkg::*;
+    import ak_algn_pkg::*;                                                                                                                           // Gives tests env access
+    import ak_apb_pkg::*;
 
-    `include "cfs_algn_test_base.sv"
-    `include "cfs_algn_test_reg_access.sv"
+    `include "ak_algn_test_base.sv"
+    `include "ak_algn_test_reg_access.sv"
   endpackage
 
 `endif
@@ -58,11 +58,11 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                                                                                                 *
  *"                                                                                                                                               "*
- *"                                     ~--- cfs_algn_test_random           not included yet                                                      "*
- *"                                     |                                                                                                         "*
- *"   uvm_test <- cfs_algn_test_base <--~--- cfs_algn_test_reg_access                                                                             "*
- *"                                     |                                                                                                         "*
- *"                                     ~--- cfs_algn_test_illegal_rx       not included yet                                                      "*
+ *"                                    ~--- ak_algn_test_random           not included yet                                                        "*
+ *"                                    |                                                                                                          "*
+ *"   uvm_test <- ak_algn_test_base <--~--- ak_algn_test_reg_access                                                                               "*
+ *"                                    |                                                                                                          "*
+ *"                                    ~--- ak_algn_test_illegal_rx       not included yet                                                        "*
  *"                                                                                                                                               "*
  *                                                                                                                                                 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */

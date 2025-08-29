@@ -1,30 +1,30 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // Author    : Ahmad Khattab
 // Date      : 8/1/25
-// File      : cfs_apb_if.sv
+// File      : ak_apb_if.sv
 // Status    : finished
 // Goal      : connecting apb agent's components with dut's apb signals using interface signals
 // Instructor: Cristian Slav
 // Tips      : read the code documentation below to understand how the code works
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-`ifndef CFS_APB_IF_SV
-  `define CFS_APB_IF_SV
+`ifndef AK_APB_IF_SV
+  `define AK_APB_IF_SV
 
-  `ifndef CFS_APB_MAX_ADDR_WIDTH
-    `define CFS_APB_MAX_ADDR_WIDTH 16
+  `ifndef AK_APB_MAX_ADDR_WIDTH
+    `define AK_APB_MAX_ADDR_WIDTH 16
   `endif
 
-  `ifndef CFS_APB_MAX_DATA_WIDTH
-    `define CFS_APB_MAX_DATA_WIDTH 32
+  `ifndef AK_APB_MAX_DATA_WIDTH
+    `define AK_APB_MAX_DATA_WIDTH 32
   `endif
 
-  interface cfs_apb_if(input pclk);                                                                                                                  // clock signal is never driven by the environment
+  interface ak_apb_if(input pclk);                                                                                                                  // clock signal is never driven by the environment
 
     logic preset_n;
-    logic [`CFS_APB_MAX_ADDR_WIDTH-1:0] paddr;
-    logic [`CFS_APB_MAX_DATA_WIDTH-1:0] prdata;
-    logic [`CFS_APB_MAX_DATA_WIDTH-1:0] pwdata;
+    logic [`AK_APB_MAX_ADDR_WIDTH-1:0] paddr;
+    logic [`AK_APB_MAX_DATA_WIDTH-1:0] prdata;
+    logic [`AK_APB_MAX_DATA_WIDTH-1:0] pwdata;
     logic penable;
     logic psel;
     logic pready;
@@ -249,6 +249,7 @@
 
 
 
+
 //////////////////////////////////////////////////////ENABLE DOCS BY REMOVING "/" IN THE NEXT LINE//////////////////////////////////////////////////
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                            --- "Diagarm Hierarchy" ---                                                          *
@@ -280,33 +281,33 @@
  *"                                    interface                                                                                                  "*
  *"                                                                                                                                               "*
  *"     (o)    apb_if.sv       macros.svh                                                                                                         "*
- *"                ↓           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                          "*
+ *"                ↓           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+                          "*
  *"                ↓           | apb_pkg                                                                               |                          "*
  *"                ↓           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                          "*
  *"                ↓set        | uvm_pkg::*                                                                            |                          "*
  *"         -----------------  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                          "*
  *"         | uvm_config_db |  |                                                                                       |                          "*
- *"         |               |  |                             ~--- cfs_apb_sequence_random<<<                           |                          "*
- *"         |    apb_vif    |  |                             |                             ^                           |                          "*
- *"         -----------------  |     cfs_apb_sequence_base <-~--- cfs_apb_sequence_rw      ^                       <   |                          "*
- *"                ↓           |                   ↑  ^      |                             ^                       ^   |                          "*
- *"                ↓           |                   ↑  ^      ~--- cfs_apb_sequence_simple>>>                       ^   |                          "*
+ *"         |               |  |                            ~--- ak_apb_sequence_random <<<                            |                          "*
+ *"         |    apb_vif    |  |                            |                             ^                            |                          "*
+ *"         -----------------  |     ak_apb_sequence_base <-~--- ak_apb_sequence_rw       ^                        <   |                          "*
+ *"                ↓           |                   ↑  ^     |                             ^                        ^   |                          "*
+ *"                ↓           |                   ↑  ^     ~--- ak_apb_sequence_simple >>>                        ^   |                          "*
  *"                ↓       get |                   ↑  ^                        ^                                   ^   |                          "*
- *"                 → → → → → →|   > cfs_apb_agent ↑  <<<<<<<<<<<<<<<<<<<<<<<<<^                    <              ^   |                          "*
- *"                            |   ^              cfs_apb_sequencer           <^                   <^              ^   |                          "*
- *"                            |   ^>      >      cfs_apb_driver              <^                   <^              ^   |                          "*
- *"                            |   ^>      ^>     cfs_apb_coverage             ^       <           <^              ^   |                          "*
- *"                            |   ^>      ^>     cfs_apb_monitor              ^      <^           <^              ^   |                          "*
- *"                            |   ^>      <<<<<<<cfs_apb_agent_config         ^       ^            ^              ^   |                          "*
+ *"                 → → → → → →|   > ak_apb_agent  ↑  <<<<<<<<<<<<<<<<<<<<<<<<<^                    <              ^   |                          "*
+ *"                            |   ^       ^      ak_apb_sequencer            <^                   <^              ^   |                          "*
+ *"                            |   ^>      >      ak_apb_driver               <^                   <^              ^   |                          "*
+ *"                            |   ^>      ^>     ak_apb_coverage              ^       <           <^              ^   |                          "*
+ *"                            |   ^>      ^>     ak_apb_monitor               ^      <^           <^              ^   |                          "*
+ *"                            |   ^>      <<<<<<<ak_apb_agent_config          ^       ^            ^              ^   |                          "*
  *"                            |   ^                                           ^       ^            ^              ^   |                          "*
- *"                            |   ^                     ~-- cfs_apb_item_drv>>>       ^            ^              ^   |                          "*
+ *"                            |   ^                     ~-- ak_apb_item_drv >>>       ^            ^              ^   |                          "*
  *"                            |   ^                     |                             ^            ^              ^   |                          "*
- *"                            |   ^>cfs_apb_item_base <-~                             ^            ^              ^   |                          "*
+ *"                            |   ^> ak_apb_item_base <-~                             ^            ^              ^   |                          "*
  *"                            |   ^                     |                             ^            ^              ^   |                          "*
- *"                            |   ^                     ~-- cfs_apb_item_mon>>>>>>>>>>>            ^              ^   |                          "*
+ *"                            |   ^                     ~-- ak_apb_item_mon >>>>>>>>>>>            ^              ^   |                          "*
  *"                            |   ^                         ^                                      ^              ^   |                          "*
- *"                            |   ^                         ^                              cfs_apb_reset_handler  ^   |                          "*
- *"                            |   ^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<cfs_apb_types>>>>>>>>>>>   |                          "*
+ *"                            |   ^                         ^                              ak_apb_reset_handler   ^   |                          "*
+ *"                            |   ^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ak_apb_types >>>>>>>>>>>   |                          "*
  *"                            |                                                                                       |                          "*
  *"                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                          "*
  *"            dut                                                                                                                                "*
