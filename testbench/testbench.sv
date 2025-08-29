@@ -8,7 +8,7 @@
 // Tips      : read the code documentation below to understand how the code works
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-`include "tests/ak_algn_test_pkg.sv"
+`include "tests/ak_algn_test_pkg.sv"                                                                                                                 // Path after testbench/
 
 module testbench();
 

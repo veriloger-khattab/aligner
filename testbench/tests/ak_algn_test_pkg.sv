@@ -12,15 +12,15 @@
   `define AK_ALGN_TEST_PKG_SV
 
   `include "uvm_macros.svh"                                                                                                                          // Enables uvm macros usage in tests
-  `include "environment/ak_algn_pkg.sv"
+  `include "tests/environment/ak_algn_pkg.sv"                                                                                                        // Path after testbench/
 
   package ak_algn_test_pkg;
     import uvm_pkg::*;                                                                                                                               // This is required as the aligner base test extends uvm_test
     import ak_algn_pkg::*;                                                                                                                           // Gives tests env access
     import ak_apb_pkg::*;
 
-    `include "ak_algn_test_base.sv"
-    `include "ak_algn_test_reg_access.sv"
+    `include "tests/ak_algn_test_base.sv"                                                                                                            // Path after testbench/
+    `include "tests/ak_algn_test_reg_access.sv"                                                                                                      // Path after testbench/
   endpackage
 
 `endif

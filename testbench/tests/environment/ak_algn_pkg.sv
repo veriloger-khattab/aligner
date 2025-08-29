@@ -12,7 +12,7 @@
   `define AK_ALGN_PKG_SV
 
   `include "uvm_macros.svh"
-  `include "apb_agent/ak_apb_pkg.sv"
+  `include "apb_agent/ak_apb_pkg.sv"                                                                                                                 // Relative path
   package ak_algn_pkg;
     import uvm_pkg::*;
     import ak_apb_pkg::*;

@@ -13,7 +13,7 @@
 
 
   `include "uvm_macros.svh"
-  `include "../../../ak_apb_if.sv"                                                                                                                            // note that it is included outside the package & should not be imported inside
+  `include "../../../ak_apb_if.sv"                                                                                                                   // note that it is included outside the package as it is located inside the testbench. Hence, it should not be imported inside (Relative path)
   package ak_apb_pkg;
     import uvm_pkg::*;
 
